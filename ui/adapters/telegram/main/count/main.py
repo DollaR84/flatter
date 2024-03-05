@@ -6,7 +6,7 @@ from aiogram.filters.command import Command
 from aiogram_dialog import Dialog, DialogManager, LaunchMode, StartMode, Window
 from aiogram_dialog.widgets.text import Format
 
-from dishka.integrations.aiogram import Depends, inject
+from dishka.integrations.aiogram import FromDishka, inject
 
 from services.compliments import Compliments
 
@@ -21,7 +21,7 @@ class CountDialog:
     async def count_handler(
             cls, message: types.Message,
             dialog_manager: DialogManager,
-            compliments: Annotated[Compliments, Depends()],
+            compliments: Annotated[Compliments, FromDishka()],
     ):
         cls._compliments_count = len(compliments.data)
         await dialog_manager.start(CountGroup.Main, mode=StartMode.RESET_STACK)

@@ -6,7 +6,7 @@ from aiogram.filters.command import Command, CommandStart
 from barsik.aiogram.functions import get_user, get_name
 from barsik.localisation import Localisation
 
-from dishka.integrations.aiogram import Depends, inject
+from dishka.integrations.aiogram import FromDishka, inject
 
 from db import DB
 
@@ -23,8 +23,8 @@ class CommandHandlers:
     @inject
     async def start_handler(
             cls, message: types.Message,
-            db: Annotated[DB, Depends()],
-            local: Annotated[Localisation, Depends()],
+            db: Annotated[DB, FromDishka()],
+            local: Annotated[Localisation, FromDishka()],
     ):
         user = User.from_schema(get_user(message))
         name = get_name(user)
@@ -39,9 +39,9 @@ class CommandHandlers:
     @inject
     async def panic_handler(
             cls, message: types.Message,
-            panic: Annotated[Panic, Depends()],
-            db: Annotated[DB, Depends()],
-            local: Annotated[Localisation, Depends()],
+            panic: Annotated[Panic, FromDishka()],
+            db: Annotated[DB, FromDishka()],
+            local: Annotated[Localisation, FromDishka()],
     ):
         user = User.from_schema(get_user(message))
         user = await db.get_and_update_user(user)

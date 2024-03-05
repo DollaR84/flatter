@@ -9,7 +9,7 @@ from barsik.localisation import Localisation
 
 from config import Config
 
-from dishka.integrations.aiogram import Depends, inject
+from dishka.integrations.aiogram import FromDishka, inject
 
 from db import DB
 
@@ -25,12 +25,12 @@ class MessageHandlers:
     @inject
     async def location_handler(
             cls, message: types.Message,
-            geo: Annotated[GeoOSM, Depends()],
-            panic: Annotated[Panic, Depends()],
-            db: Annotated[DB, Depends()],
-            local: Annotated[Localisation, Depends()],
-            bot: Annotated[Bot, Depends()],
-            cfg: Annotated[Config, Depends()],
+            geo: Annotated[GeoOSM, FromDishka()],
+            panic: Annotated[Panic, FromDishka()],
+            db: Annotated[DB, FromDishka()],
+            local: Annotated[Localisation, FromDishka()],
+            bot: Annotated[Bot, FromDishka()],
+            cfg: Annotated[Config, FromDishka()],
     ):
         user = User.from_schema(get_user(message))
         name = get_name(user)
@@ -62,9 +62,9 @@ class MessageHandlers:
     @inject
     async def menu_handler(
             cls, message: types.Message,
-            compliments: Annotated[Compliments, Depends()],
-            db: Annotated[DB, Depends()],
-            local: Annotated[Localisation, Depends()],
+            compliments: Annotated[Compliments, FromDishka()],
+            db: Annotated[DB, FromDishka()],
+            local: Annotated[Localisation, FromDishka()],
     ):
         user = User.from_schema(get_user(message))
         user = await db.get_user(user)
