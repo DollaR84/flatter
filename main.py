@@ -16,7 +16,7 @@ async def main():
     service = ServiceProvider(config.config)
 
     container = make_async_container(config, core, bot, main, service)
-    setup_dishka(container=container, router=bot.dp)
+    setup_dishka(container=container, router=bot.dp, auto_inject=True)
 
     try:
         await bot.dp.start_polling(bot.bot)

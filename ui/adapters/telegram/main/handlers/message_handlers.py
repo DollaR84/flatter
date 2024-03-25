@@ -1,5 +1,3 @@
-from typing import Annotated
-
 from aiogram import Bot, F, types
 from aiogram import Router
 
@@ -9,7 +7,7 @@ from barsik.localisation import Localisation
 
 from config import Config
 
-from dishka.integrations.aiogram import FromDishka, inject
+from dishka.integrations.aiogram import FromDishka
 
 from db import DB
 
@@ -22,15 +20,14 @@ from services.panic import Panic
 class MessageHandlers:
 
     @classmethod
-    @inject
     async def location_handler(
             cls, message: types.Message,
-            geo: Annotated[GeoOSM, FromDishka()],
-            panic: Annotated[Panic, FromDishka()],
-            db: Annotated[DB, FromDishka()],
-            local: Annotated[Localisation, FromDishka()],
-            bot: Annotated[Bot, FromDishka()],
-            cfg: Annotated[Config, FromDishka()],
+            geo: FromDishka[GeoOSM],
+            panic: FromDishka[Panic],
+            db: FromDishka[DB],
+            local: FromDishka[Localisation],
+            bot: FromDishka[Bot],
+            cfg: FromDishka[Config],
     ):
         user = User.from_schema(get_user(message))
         name = get_name(user)
@@ -59,12 +56,11 @@ class MessageHandlers:
         await message.answer(await local.fs("phrases", "panic_answer", user.lang), parse_mode="HTML")
 
     @classmethod
-    @inject
     async def menu_handler(
             cls, message: types.Message,
-            compliments: Annotated[Compliments, FromDishka()],
-            db: Annotated[DB, FromDishka()],
-            local: Annotated[Localisation, FromDishka()],
+            compliments: FromDishka[Compliments],
+            db: FromDishka[DB],
+            local: FromDishka[Localisation],
     ):
         user = User.from_schema(get_user(message))
         user = await db.get_user(user)

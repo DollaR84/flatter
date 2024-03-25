@@ -1,12 +1,10 @@
-from typing import Annotated
-
 from aiogram import Router, types
 from aiogram.filters.command import Command, CommandStart
 
 from barsik.aiogram.functions import get_user, get_name
 from barsik.localisation import Localisation
 
-from dishka.integrations.aiogram import FromDishka, inject
+from dishka.integrations.aiogram import FromDishka
 
 from db import DB
 
@@ -20,11 +18,10 @@ from ..keyboards import get_menu_keyboard
 class CommandHandlers:
 
     @classmethod
-    @inject
     async def start_handler(
             cls, message: types.Message,
-            db: Annotated[DB, FromDishka()],
-            local: Annotated[Localisation, FromDishka()],
+            db: FromDishka[DB],
+            local: FromDishka[Localisation],
     ):
         user = User.from_schema(get_user(message))
         name = get_name(user)
@@ -36,12 +33,11 @@ class CommandHandlers:
         await message.answer(message_text, reply_markup=menu_keyboard, parse_mode="HTML")
 
     @classmethod
-    @inject
     async def panic_handler(
             cls, message: types.Message,
-            panic: Annotated[Panic, FromDishka()],
-            db: Annotated[DB, FromDishka()],
-            local: Annotated[Localisation, FromDishka()],
+            panic: FromDishka[Panic],
+            db: FromDishka[DB],
+            local: FromDishka[Localisation],
     ):
         user = User.from_schema(get_user(message))
         user = await db.get_and_update_user(user)

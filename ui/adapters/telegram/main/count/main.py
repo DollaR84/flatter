@@ -1,12 +1,10 @@
-from typing import Annotated
-
 from aiogram import Dispatcher, Router, types
 from aiogram.filters.command import Command
 
 from aiogram_dialog import Dialog, DialogManager, LaunchMode, StartMode, Window
 from aiogram_dialog.widgets.text import Format
 
-from dishka.integrations.aiogram import FromDishka, inject
+from dishka.integrations.aiogram import FromDishka
 
 from services.compliments import Compliments
 
@@ -17,11 +15,10 @@ class CountDialog:
     _compliments_count: int = 0
 
     @classmethod
-    @inject
     async def count_handler(
             cls, message: types.Message,
             dialog_manager: DialogManager,
-            compliments: Annotated[Compliments, FromDishka()],
+            compliments: FromDishka[Compliments],
     ):
         cls._compliments_count = len(compliments.data)
         await dialog_manager.start(CountGroup.Main, mode=StartMode.RESET_STACK)

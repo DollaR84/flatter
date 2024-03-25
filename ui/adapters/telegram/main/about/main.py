@@ -1,5 +1,3 @@
-from typing import Annotated
-
 from aiogram import Dispatcher, Router, types
 from aiogram.filters.command import Command
 
@@ -8,7 +6,7 @@ from aiogram_dialog import Dialog, DialogManager, LaunchMode, StartMode, Window
 from barsik.aiogram.functions import get_user
 from barsik.aiogram.dialog.widgets.text import FormatLocalisation
 
-from dishka.integrations.aiogram import FromDishka, inject
+from dishka.integrations.aiogram import FromDishka
 
 from db import DB
 
@@ -20,11 +18,10 @@ from .states import AboutGroup
 class AboutDialog:
 
     @classmethod
-    @inject
     async def about_handler(
             cls, message: types.Message,
             dialog_manager: DialogManager,
-            db: Annotated[DB, FromDishka()],
+            db: FromDishka[DB],
     ):
         user = User.from_schema(get_user(message))
         user = await db.get_and_update_user(user)
