@@ -10,4 +10,4 @@ geopy
 shapely
 pyproj
 dishka
-/mnt/d/projects/barsik/
+https://github.com/DollaR84/barsik
